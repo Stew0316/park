@@ -11,6 +11,7 @@ export default ({mode}) => {
   return defineConfig({
     base: env.VITE_BASE_NAME,
     plugins: [react()],
+    assetsInclude: ['**/*.fbx'],
     server: {
       port: env.VITE_PORT,
       proxy: {

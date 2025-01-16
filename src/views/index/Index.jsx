@@ -3,6 +3,8 @@ import * as THREE from 'three';
 import Styles from '@/style/Index.module.scss';
 import { useEffect } from 'react';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+import {FBXLoader} from 'three/examples/jsm/loaders/FBXLoader';
+import testMod from "../../mod/test.fbx";
 function init() {
   const scene = new THREE.Scene();
   scene.background = new THREE.Color(0x000000);
@@ -23,6 +25,23 @@ function init() {
   camera.position.z = 5;
   const controls = new OrbitControls( camera, renderer.domElement );
   controls.update();
+  const light = new THREE.AmbientLight( 0x404040 ); // 柔和的白光
+scene.add( light );
+  const loader = new FBXLoader();
+  loader.load(testMod, (object) => {
+    // 当模型加载完成时的回调
+    scene.add(object);
+    console.log('FBX 模型加载成功', object);
+  },
+  (xhr) => {
+    // 加载进度
+    console.log(`加载进度: ${(xhr.loaded / xhr.total) * 100}%`);
+  },
+  (error) => {
+    // 加载错误
+    console.error('FBX 模型加载失败', error);
+  });
+
   function animate() {
     requestAnimationFrame( animate );
     cube.rotation.x += 0.01;
